@@ -13,9 +13,13 @@ cube(`orders`, {
   select 5 as id, 600 as amount, 'shipped' status
   `,
 
-  pre_aggregations: {
-    // Pre-Aggregations definitions go here
-    // Learn more here: https://cube.dev/docs/caching/pre-aggregations/getting-started
+  preAggregations: {
+    by_status: {
+      type: 'rollup',
+      measureReferences: [CUBE.count, CUBE.total_amount],
+      dimensionReferences: [CUBE.status],
+      refreshKey: { every: '1 hour' }
+    }
   },
 
   measures: {
