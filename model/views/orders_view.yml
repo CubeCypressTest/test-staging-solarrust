@@ -1,0 +1,20 @@
+views:
+  orders_view:
+    table:
+      cube: orders
+
+    columns:
+      - name: id
+        dimension: orders.id
+
+      - name: status
+        dimension: orders.status
+
+      - name: created_at
+        dimension: orders.created_at
+
+      - name: total_amount
+        measure: orders.total_amount
+
+      - name: count
+        measure: orders.count
