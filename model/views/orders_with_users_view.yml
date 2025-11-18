@@ -1,0 +1,35 @@
+views:
+  - name: orders_with_users_view
+    description: Orders data combined with user demographics and information
+
+    cubes:
+      - join_path: orders
+        includes:
+          # Order dimensions
+          - id
+          - number
+          - status
+          - created_at
+          - completed_at
+
+          # Order measures
+          - count
+          - completed_count
+          - shipped_count
+          - cancelled_count
+
+      - join_path: orders.users
+        prefix: true
+        includes:
+          # User dimensions
+          - city
+          - state
+          - age
+          - gender
+          - company
+          - full_name
+          - created_at
+
+          # User measures
+          - count
+          - average_age

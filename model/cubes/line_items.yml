@@ -1,0 +1,66 @@
+cubes:
+  - name: line_items
+    sql_table: public.line_items
+    description: Individual items within orders
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.id"
+        type: number
+        primary_key: true
+
+      - name: product_id
+        sql: "{CUBE}.product_id"
+        type: number
+
+      - name: order_id
+        sql: "{CUBE}.order_id"
+        type: number
+
+      - name: quantity
+        sql: "{CUBE}.quantity"
+        type: number
+        description: Quantity of the product ordered
+
+      - name: price
+        sql: "{CUBE}.price"
+        type: number
+        description: Price per unit
+
+      - name: created_at
+        sql: "{CUBE}.created_at"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+        description: Total number of line items
+
+      - name: total_quantity
+        sql: "{CUBE}.quantity"
+        type: sum
+        description: Total quantity of all items
+
+      - name: total_revenue
+        sql: "{CUBE}.price * {CUBE}.quantity"
+        type: sum
+        description: Total revenue from line items
+
+      - name: average_price
+        sql: "{CUBE}.price"
+        type: avg
+        description: Average price per unit
+
+      - name: average_quantity
+        sql: "{CUBE}.quantity"
+        type: avg
+        description: Average quantity per line item
+
+    joins:
+      - name: products
+        sql: "{CUBE}.product_id = {products.id}"
+        relationship: many_to_one
+
+      - name: orders
+        sql: "{CUBE}.order_id = {orders.id}"
+        relationship: many_to_one

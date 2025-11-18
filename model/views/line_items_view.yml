@@ -1,0 +1,40 @@
+views:
+  - name: line_items_view
+    description: Line items with product details and revenue metrics
+
+    cubes:
+      - join_path: line_items
+        includes:
+          # Line item dimensions
+          - id
+          - quantity
+          - price
+          - created_at
+
+          # Line item measures
+          - count
+          - total_quantity
+          - total_revenue
+          - average_price
+          - average_quantity
+
+      - join_path: line_items.products
+        prefix: true
+        includes:
+          # Product dimensions
+          - name
+          - description
+          - created_at
+
+      - join_path: line_items.products.product_categories
+        prefix: true
+        includes:
+          # Category dimensions
+          - name
+
+      - join_path: line_items.products.suppliers
+        prefix: true
+        includes:
+          # Supplier dimensions
+          - company
+          - email

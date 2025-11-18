@@ -1,0 +1,34 @@
+cubes:
+  - name: suppliers
+    sql_table: public.suppliers
+    description: Supplier information for products
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.id"
+        type: number
+        primary_key: true
+
+      - name: company
+        sql: "{CUBE}.company"
+        type: string
+        description: Supplier company name
+
+      - name: email
+        sql: "{CUBE}.email"
+        type: string
+        description: Supplier email address
+
+      - name: address
+        sql: "{CUBE}.address"
+        type: string
+        description: Supplier address
+
+      - name: created_at
+        sql: "{CUBE}.created_at"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+        description: Total number of suppliers

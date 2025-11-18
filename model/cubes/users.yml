@@ -1,0 +1,63 @@
+cubes:
+  - name: users
+    sql_table: public.users
+    description: User information and demographics
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.id"
+        type: number
+        primary_key: true
+
+      - name: first_name
+        sql: "{CUBE}.first_name"
+        type: string
+
+      - name: last_name
+        sql: "{CUBE}.last_name"
+        type: string
+
+      - name: full_name
+        sql: "CONCAT({CUBE}.first_name, ' ', {CUBE}.last_name)"
+        type: string
+
+      - name: city
+        sql: "{CUBE}.city"
+        type: string
+
+      - name: state
+        sql: "{CUBE}.state"
+        type: string
+
+      - name: age
+        sql: "{CUBE}.age"
+        type: number
+
+      - name: gender
+        sql: "{CUBE}.gender"
+        type: string
+
+      - name: company
+        sql: "{CUBE}.company"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.created_at"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+        description: Total number of users
+
+      - name: average_age
+        sql: "{CUBE}.age"
+        type: avg
+        description: Average age of users
+
+      - name: count_by_gender
+        sql: "{CUBE}.id"
+        type: count
+        filters:
+          - sql: "{CUBE}.gender IS NOT NULL"
+        description: Count of users with gender information

@@ -1,20 +1,19 @@
 views:
-  orders_view:
-    table:
-      cube: orders
+  - name: orders_view
+    description: Comprehensive view of order data with key metrics
 
-    columns:
-      - name: id
-        dimension: orders.id
+    cubes:
+      - join_path: orders
+        includes:
+          # Dimensions
+          - id
+          - number
+          - status
+          - created_at
+          - completed_at
 
-      - name: status
-        dimension: orders.status
-
-      - name: created_at
-        dimension: orders.created_at
-
-      - name: total_amount
-        measure: orders.total_amount
-
-      - name: count
-        measure: orders.count
+          # Measures  
+          - count
+          - completed_count
+          - shipped_count
+          - cancelled_count

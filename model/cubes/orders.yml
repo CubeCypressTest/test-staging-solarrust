@@ -1,0 +1,71 @@
+cubes:
+  - name: orders
+    sql_table: public.orders
+    description: Customer orders and order information
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.id"
+        type: number
+        primary_key: true
+
+      - name: user_id
+        sql: "{CUBE}.user_id"
+        type: number
+
+      - name: number
+        sql: "{CUBE}.number"
+        type: number
+        description: Order number
+
+      - name: status
+        sql: "{CUBE}.status"
+        type: string
+        description: Order status
+
+      - name: created_at
+        sql: "{CUBE}.created_at"
+        type: time
+
+      - name: completed_at
+        sql: "{CUBE}.completed_at"
+        type: time
+
+      - name: product_id
+        sql: "{CUBE}.product_id"
+        type: number
+
+    measures:
+      - name: count
+        type: count
+        description: Total number of orders
+
+      - name: completed_count
+        sql: "{CUBE}.id"
+        type: count
+        filters:
+          - sql: "{CUBE}.status = 'completed'"
+        description: Number of completed orders
+
+      - name: shipped_count
+        sql: "{CUBE}.id"
+        type: count
+        filters:
+          - sql: "{CUBE}.status = 'shipped'"
+        description: Number of shipped orders
+
+      - name: cancelled_count
+        sql: "{CUBE}.id"
+        type: count
+        filters:
+          - sql: "{CUBE}.status = 'cancelled'"
+        description: Number of cancelled orders
+
+    joins:
+      - name: users
+        sql: "{CUBE}.user_id = {users.id}"
+        relationship: many_to_one
+
+      - name: line_items
+        sql: "{CUBE}.id = {line_items.order_id}"
+        relationship: one_to_many

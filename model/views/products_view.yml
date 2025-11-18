@@ -1,0 +1,37 @@
+views:
+  - name: products_view
+    description: Products with category and supplier information
+
+    cubes:
+      - join_path: products
+        includes:
+          # Product dimensions
+          - id
+          - name
+          - description
+          - created_at
+
+          # Product measures
+          - count
+
+      - join_path: products.product_categories
+        prefix: true
+        includes:
+          # Category dimensions
+          - name
+          - created_at
+
+          # Category measures
+          - count
+
+      - join_path: products.suppliers
+        prefix: true
+        includes:
+          # Supplier dimensions
+          - company
+          - email
+          - address
+          - created_at
+
+          # Supplier measures
+          - count

@@ -1,0 +1,23 @@
+views:
+  - name: users_view
+    description: User demographics and information
+
+    cubes:
+      - join_path: users
+        includes:
+          # User dimensions
+          - id
+          - first_name
+          - last_name
+          - full_name
+          - city
+          - state
+          - age
+          - gender
+          - company
+          - created_at
+
+          # User measures
+          - count
+          - average_age
+          - count_by_gender

@@ -1,0 +1,24 @@
+cubes:
+  - name: product_categories
+    sql_table: public.product_categories
+    description: Product categories for organizing products
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.id"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.name"
+        type: string
+        description: Category name
+
+      - name: created_at
+        sql: "{CUBE}.created_at"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+        description: Total number of product categories

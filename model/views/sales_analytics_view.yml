@@ -1,0 +1,52 @@
+views:
+  - name: sales_analytics_view
+    description: Comprehensive sales analytics combining orders, line items, products, users, and categories
+
+    cubes:
+      - join_path: line_items
+        includes:
+          # Line item metrics
+          - count
+          - total_quantity
+          - total_revenue
+          - average_price
+          - average_quantity
+          - created_at
+
+      - join_path: line_items.orders
+        prefix: true
+        includes:
+          # Order information
+          - status
+          - number
+          - created_at
+          - completed_at
+
+      - join_path: line_items.orders.users
+        prefix: true
+        includes:
+          # User demographics
+          - city
+          - state
+          - age
+          - gender
+          - company
+
+      - join_path: line_items.products
+        prefix: true
+        includes:
+          # Product details
+          - name
+          - description
+
+      - join_path: line_items.products.product_categories
+        prefix: true
+        includes:
+          # Product category
+          - name
+
+      - join_path: line_items.products.suppliers
+        prefix: true
+        includes:
+          # Supplier information
+          - company
