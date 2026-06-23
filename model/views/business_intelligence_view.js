@@ -1,34 +1,27 @@
-view(`orders_view`, {
-  description: `Comprehensive orders view with hierarchies for business intelligence and drill-down analysis.`,
+view(`business_intelligence_view`, {
+  description: `Comprehensive business intelligence view combining all entities with complex multi-dimensional hierarchies for advanced analytics and drill-down analysis.`,
 
   cubes: [
     {
       join_path: orders,
       includes: [
-        // Measures
+        // Key Order Metrics
         `count`,
         `total_orders`,
         `completed_orders`,
         `pending_orders`,
         `avg_completion_time`,
-        // Dimensions
+        // Order Dimensions
         `status`,
         `status_category`,
         `fulfillment_priority`,
         `created_at`,
-        `created_year`,
         `created_quarter`,
         `created_month`,
-        `created_week`,
-        `created_day`,
-        // Hierarchies
+        // Complex Hierarchies (excluding cross-cube references)
+        `operational_efficiency`,
         `order_status_workflow`,
         `temporal_orders`,
-        `customer_geography`,
-        `product_orders`,
-        `customer_demographics`,
-        `business_analysis`,
-        `operational_efficiency`,
         `revenue_attribution`,
         `customer_journey`
       ]
@@ -36,28 +29,46 @@ view(`orders_view`, {
     {
       join_path: orders.users,
       includes: [
+        // User Metrics
         `count`,
         `average_age`,
         `total_users`,
-        `first_name`,
-        `last_name`,
-        `full_name`,
-        `company`,
-        `gender`,
-        `age_group`,
+        // Geographic Dimensions
         `city`,
         `state`,
         `country`,
         `region`,
-        `created_at`,
+        // Demographic Dimensions
+        `gender`,
+        `age_group`,
+        `company`,
+        // User Hierarchies
         `geography`,
         `demographics`,
-        `temporal`,
         `business_profile`,
         `customer_lifecycle`
       ],
       prefix: true
-    }
+    },
+    {
+      join_path: orders.products,
+      includes: [
+        // Product Metrics
+        `count`,
+        `unique_products`,
+        // Product Dimensions
+        `name`,
+        `product_type`,
+        `material_type`,
+        `quality_tier`,
+        `created_quarter`,
+        // Product Hierarchies (without cross-cube references)
+        `material_hierarchy`,
+        `supply_chain`
+      ],
+      prefix: true
+    },
+
   ],
 
   folders: [
@@ -72,7 +83,7 @@ view(`orders_view`, {
       ]
     },
     {
-      name: `Order Status`,
+      name: `Order Status & Fulfillment`,
       includes: [
         `status`,
         `status_category`,
@@ -85,11 +96,8 @@ view(`orders_view`, {
       name: `Order Timeline`,
       includes: [
         `created_at`,
-        `created_year`,
         `created_quarter`,
         `created_month`,
-        `created_week`,
-        `created_day`,
         `temporal_orders`
       ]
     },
@@ -102,50 +110,55 @@ view(`orders_view`, {
       ]
     },
     {
-      name: `Customer Identity`,
-      includes: [
-        `users_first_name`,
-        `users_last_name`,
-        `users_full_name`,
-        `users_company`,
-        `users_gender`,
-        `users_age_group`
-      ]
-    },
-    {
       name: `Customer Geography`,
       includes: [
         `users_city`,
         `users_state`,
         `users_country`,
         `users_region`,
-        `users_geography`,
-        `customer_geography`
+        `users_geography`
       ]
     },
     {
       name: `Customer Demographics`,
       includes: [
+        `users_gender`,
+        `users_age_group`,
+        `users_company`,
         `users_demographics`,
-        `users_business_profile`,
-        `customer_demographics`
+        `users_business_profile`
       ]
     },
     {
-      name: `Customer Timeline`,
+      name: `Customer Journey & Attribution`,
       includes: [
-        `users_created_at`,
-        `users_temporal`,
         `users_customer_lifecycle`,
-        `customer_journey`
+        `customer_journey`,
+        `revenue_attribution`
       ]
     },
     {
-      name: `Business Analysis`,
+      name: `Product Metrics`,
       includes: [
-        `product_orders`,
-        `business_analysis`,
-        `revenue_attribution`
+        `products_count`,
+        `products_unique_products`
+      ]
+    },
+    {
+      name: `Product Details`,
+      includes: [
+        `products_name`,
+        `products_product_type`,
+        `products_quality_tier`,
+        `products_created_quarter`
+      ]
+    },
+    {
+      name: `Material & Supply Chain`,
+      includes: [
+        `products_material_type`,
+        `products_material_hierarchy`,
+        `products_supply_chain`
       ]
     }
   ]
