@@ -1,5 +1,6 @@
 cube(`users`, {
   sql_table: `users`,
+  description: `Customer and user information including demographics, geographic location, and profile details. Central to customer analytics and segmentation with hierarchies for geography, demographics, and lifecycle analysis.`,
   public: false,
 
   measures: {

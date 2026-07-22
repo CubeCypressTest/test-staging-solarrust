@@ -1,5 +1,6 @@
 cube(`products`, {
   sql_table: `products`,
+  description: `Product catalog containing all available products with categorization, material types, and quality tiers. Links to product categories and suppliers for complete product information.`,
   public: false,
 
   joins: {
@@ -73,10 +74,10 @@ cube(`products`, {
 
     product_type: {
       sql: `CASE 
-        WHEN {CUBE}.name ILIKE '%keyboard%' OR {CUBE}.name ILIKE '%mouse%' OR {CUBE}.name ILIKE '%computer%' THEN 'Technology'
-        WHEN {CUBE}.name ILIKE '%pants%' OR {CUBE}.name ILIKE '%shirt%' OR {CUBE}.name ILIKE '%gloves%' THEN 'Apparel'
-        WHEN {CUBE}.name ILIKE '%ball%' OR {CUBE}.name ILIKE '%toy%' THEN 'Recreation'
-        WHEN {CUBE}.name ILIKE '%food%' OR {CUBE}.name ILIKE '%chips%' OR {CUBE}.name ILIKE '%pizza%' THEN 'Food'
+        WHEN ${CUBE}.name ILIKE '%keyboard%' OR ${CUBE}.name ILIKE '%mouse%' OR ${CUBE}.name ILIKE '%computer%' THEN 'Technology'
+        WHEN ${CUBE}.name ILIKE '%pants%' OR ${CUBE}.name ILIKE '%shirt%' OR ${CUBE}.name ILIKE '%gloves%' THEN 'Apparel'
+        WHEN ${CUBE}.name ILIKE '%ball%' OR ${CUBE}.name ILIKE '%toy%' THEN 'Recreation'
+        WHEN ${CUBE}.name ILIKE '%food%' OR ${CUBE}.name ILIKE '%chips%' OR ${CUBE}.name ILIKE '%pizza%' THEN 'Food'
         ELSE 'Other'
       END`,
       type: `string`,
@@ -85,13 +86,13 @@ cube(`products`, {
 
     material_type: {
       sql: `CASE 
-        WHEN {CUBE}.name ILIKE '%metal%' THEN 'Metal'
-        WHEN {CUBE}.name ILIKE '%plastic%' THEN 'Plastic'
-        WHEN {CUBE}.name ILIKE '%rubber%' THEN 'Rubber'
-        WHEN {CUBE}.name ILIKE '%cotton%' THEN 'Cotton'
-        WHEN {CUBE}.name ILIKE '%wooden%' OR {CUBE}.name ILIKE '%wood%' THEN 'Wood'
-        WHEN {CUBE}.name ILIKE '%granite%' THEN 'Stone'
-        WHEN {CUBE}.name ILIKE '%frozen%' THEN 'Frozen'
+        WHEN ${CUBE}.name ILIKE '%metal%' THEN 'Metal'
+        WHEN ${CUBE}.name ILIKE '%plastic%' THEN 'Plastic'
+        WHEN ${CUBE}.name ILIKE '%rubber%' THEN 'Rubber'
+        WHEN ${CUBE}.name ILIKE '%cotton%' THEN 'Cotton'
+        WHEN ${CUBE}.name ILIKE '%wooden%' OR ${CUBE}.name ILIKE '%wood%' THEN 'Wood'
+        WHEN ${CUBE}.name ILIKE '%granite%' THEN 'Stone'
+        WHEN ${CUBE}.name ILIKE '%frozen%' THEN 'Frozen'
         ELSE 'Mixed/Other'
       END`,
       type: `string`,
@@ -100,10 +101,10 @@ cube(`products`, {
 
     quality_tier: {
       sql: `CASE 
-        WHEN {CUBE}.name ILIKE '%generic%' THEN 'Standard'
-        WHEN {CUBE}.name ILIKE '%awesome%' OR {CUBE}.name ILIKE '%fantastic%' OR {CUBE}.name ILIKE '%gorgeous%' THEN 'Premium'
-        WHEN {CUBE}.name ILIKE '%refined%' OR {CUBE}.name ILIKE '%ergonomic%' OR {CUBE}.name ILIKE '%licensed%' THEN 'Professional'
-        WHEN {CUBE}.name ILIKE '%practical%' OR {CUBE}.name ILIKE '%tasty%' THEN 'Value'
+        WHEN ${CUBE}.name ILIKE '%generic%' THEN 'Standard'
+        WHEN ${CUBE}.name ILIKE '%awesome%' OR ${CUBE}.name ILIKE '%fantastic%' OR ${CUBE}.name ILIKE '%gorgeous%' THEN 'Premium'
+        WHEN ${CUBE}.name ILIKE '%refined%' OR ${CUBE}.name ILIKE '%ergonomic%' OR ${CUBE}.name ILIKE '%licensed%' THEN 'Professional'
+        WHEN ${CUBE}.name ILIKE '%practical%' OR ${CUBE}.name ILIKE '%tasty%' THEN 'Value'
         ELSE 'Standard'
       END`,
       type: `string`,
@@ -178,6 +179,7 @@ cube(`products`, {
 
 cube(`product_categories`, {
   sql_table: `product_categories`,
+  description: `Product category classifications for organizing products into logical groups. Provides hierarchical structure for product catalog organization.`,
   public: false,
 
   measures: {
@@ -211,6 +213,7 @@ cube(`product_categories`, {
 
 cube(`suppliers`, {
   sql_table: `suppliers`,
+  description: `Supplier information including contact details and relationships to products. Enables supply chain analysis and vendor management reporting.`,
   public: false,
 
   measures: {

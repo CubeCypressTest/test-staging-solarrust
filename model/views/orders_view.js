@@ -1,5 +1,5 @@
 view(`orders_view`, {
-  description: `Comprehensive orders view with hierarchies for business intelligence and drill-down analysis.`,
+  description: `Comprehensive orders view with hierarchies for business intelligence and drill-down analysis. Combines order transactions, customer demographics, geographic data, and line item revenue metrics. Includes order status workflows, temporal analysis, customer geography hierarchies, and operational efficiency metrics. Use for questions about order performance, revenue trends, customer segmentation, and fulfillment analysis.`,
 
   cubes: [
     {
@@ -55,6 +55,26 @@ view(`orders_view`, {
         `temporal`,
         `business_profile`,
         `customer_lifecycle`
+      ],
+      prefix: true
+    },
+    {
+      join_path: orders.line_items,
+      includes: [
+        // Revenue Metrics
+        `total_revenue`,
+        `total_quantity`,
+        `total_price`,
+        `line_item_count`,
+        `average_item_price`,
+        `average_quantity`,
+        `average_revenue_per_line_item`,
+        // Line Item Dimensions
+        `created_at`,
+        `created_quarter`,
+        `created_month`,
+        // Line Item Hierarchies
+        `temporal_line_items`
       ],
       prefix: true
     }
@@ -146,6 +166,27 @@ view(`orders_view`, {
         `product_orders`,
         `business_analysis`,
         `revenue_attribution`
+      ]
+    },
+    {
+      name: `Revenue Metrics`,
+      includes: [
+        `line_items_total_revenue`,
+        `line_items_total_quantity`,
+        `line_items_total_price`,
+        `line_items_line_item_count`,
+        `line_items_average_item_price`,
+        `line_items_average_quantity`,
+        `line_items_average_revenue_per_line_item`
+      ]
+    },
+    {
+      name: `Revenue Timeline`,
+      includes: [
+        `line_items_created_at`,
+        `line_items_created_quarter`,
+        `line_items_created_month`,
+        `line_items_temporal_line_items`
       ]
     }
   ]

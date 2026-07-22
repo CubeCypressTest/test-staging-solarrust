@@ -1,1 +1,73 @@
-llm: auto
+llm: claude_4_sonnet
+runtime: plain
+memory_mode: user
+
+accessible_views:
+  - orders_view
+  - products_view
+  - users_view
+  - business_intelligence_view
+
+rules:
+  - name: prefer-bi-view
+    prompt: |
+      When the user's question spans multiple entities (orders, products, and users together),
+      prefer querying business_intelligence_view because it already joins all relevant cubes.
+      Use the single-entity views (orders_view, products_view, users_view) only when the
+      question is scoped to one domain.
+    type: always
+
+  - name: order-status-values
+    prompt: |
+      The orders data has a "status" dimension with values such as "completed", "processing",
+      and "shipped". There is also a derived "status_category" dimension that buckets statuses
+      into broader groups, and a "fulfillment_priority" dimension. When users ask about
+      order health or fulfillment, leverage these dimensions.
+    type: agent_requested
+    description: "Apply when the user asks about order statuses, fulfillment, or completion rates."
+
+  - name: geography-hierarchy
+    prompt: |
+      User geography follows the hierarchy: region → country → state → city.
+      When the user asks for a geographic breakdown, start at the region level and
+      offer to drill down. Use orders_view or business_intelligence_view which
+      expose users_region, users_country, users_state, and users_city.
+    type: agent_requested
+    description: "Apply when the user asks for geographic or location-based analysis."
+
+  - name: default-time-grain
+    prompt: |
+      When the user does not specify a time granularity, default to monthly
+      (DATE_TRUNC('month', ...)) for trend analysis. For dashboards, prefer
+      the last 30 days as the default date range filter.
+    type: always
+
+skills:
+  - name: bar
+    title: "Weekly Revenue Report"
+    description: "Generate a comprehensive weekly revenue report with trends, top products, and regional breakdown"
+    instructions: |
+      Create a weekly revenue report that includes:
+      1. Total revenue for the last 7 days compared to the previous 7 days (week-over-week change)
+      2. Revenue by day over the last 30 days as a line chart
+      3. Top 10 products by revenue for the current week
+      4. Revenue breakdown by region
+      5. Order completion rate for the week
+      Use the business_intelligence_view and format all currency values appropriately.
+      Present the data in a clear, dashboard-style format with KPIs at the top.
+
+  - name: customer
+    title: "Customer Geographic Analysis Geographic Analysis Geographic Analysis"
+    description: "Analyze customer distribution and order patterns across regions, countries, and states"
+    instructions: |
+      Perform a geographic analysis of customers and orders using the last available period of data:
+      1. Determine the last available date in the dataset
+      2. Start with total orders and revenue by region for the last available month
+      3. Create a bar chart showing orders by top 10 countries for the last available month
+      4. Show customer count by region for the last available month
+      5. Calculate average order value by region for the last available month
+      6. Identify regions with the highest growth (compare the last available month to the previous month)
+      Use the business_intelligence_view with geographic dimensions (users_region, users_country, users_state).
+      Always use the most recent data available in the dataset.
+      Offer to drill down into specific regions if the user wants more detail.
+

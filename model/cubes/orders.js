@@ -1,5 +1,6 @@
 cube(`orders`, {
   sql_table: `orders`,
+  description: `Core orders cube containing all order transactions and status information. Tracks order lifecycle from creation through completion with relationships to users, products, and line items.`,
   public: false,
 
   joins: {
@@ -11,6 +12,11 @@ cube(`orders`, {
     products: {
       sql: `${CUBE}.product_id = ${products.id}`,
       relationship: `many_to_one`
+    },
+
+    line_items: {
+      sql: `${CUBE}.id = ${line_items.order_id}`,
+      relationship: `one_to_many`
     }
   },
 

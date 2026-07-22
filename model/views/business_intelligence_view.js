@@ -68,7 +68,36 @@ view(`business_intelligence_view`, {
       ],
       prefix: true
     },
-
+    {
+      join_path: orders.line_items.products.product_categories,
+      includes: [
+        {
+          name: `name`,
+          alias: `product_categories_name`
+        }
+      ],
+      prefix: true
+    },
+    {
+      join_path: orders.line_items,
+      includes: [
+        // Revenue Metrics
+        `total_revenue`,
+        `total_quantity`,
+        `total_price`,
+        `line_item_count`,
+        `average_item_price`,
+        `average_quantity`,
+        `average_revenue_per_line_item`,
+        // Line Item Dimensions
+        `created_at`,
+        `created_quarter`,
+        `created_month`,
+        // Line Item Hierarchies
+        `temporal_line_items`
+      ],
+      prefix: true
+    }
   ],
 
   folders: [
@@ -150,7 +179,8 @@ view(`business_intelligence_view`, {
         `products_name`,
         `products_product_type`,
         `products_quality_tier`,
-        `products_created_quarter`
+        `products_created_quarter`,
+        `product_categories_product_categories_name`
       ]
     },
     {
@@ -159,6 +189,27 @@ view(`business_intelligence_view`, {
         `products_material_type`,
         `products_material_hierarchy`,
         `products_supply_chain`
+      ]
+    },
+    {
+      name: `Revenue Metrics`,
+      includes: [
+        `line_items_total_revenue`,
+        `line_items_total_quantity`,
+        `line_items_total_price`,
+        `line_items_line_item_count`,
+        `line_items_average_item_price`,
+        `line_items_average_quantity`,
+        `line_items_average_revenue_per_line_item`
+      ]
+    },
+    {
+      name: `Revenue Timeline`,
+      includes: [
+        `line_items_created_at`,
+        `line_items_created_quarter`,
+        `line_items_created_month`,
+        `line_items_temporal_line_items`
       ]
     }
   ]
